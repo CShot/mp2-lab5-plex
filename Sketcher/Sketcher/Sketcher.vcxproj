@@ -81,10 +81,16 @@
     <ClCompile Include="MyForm.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Circle.h" />
+    <ClInclude Include="Curve.h" />
+    <ClInclude Include="Ellipse.h" />
+    <ClInclude Include="Line.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Sketch.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">
