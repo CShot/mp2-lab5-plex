@@ -22,10 +22,13 @@ namespace Sketcher
 			width = Math::Abs(p1.X - p2.X);
 			height = Math::Abs(p1.Y - p2.Y);
 			boundRect = System::Drawing::Rectangle(position, Size(width, height));
+			int penWidth(safe_cast<int>(pen->Width));
+			boundRect.Inflate(penWidth, penWidth);
 		}
 
 		virtual void Draw(Graphics^ g) override
 		{
+			pen->Color=highlighted?highlightColor:color;
 			g->DrawRectangle(pen, position.X, position.Y, width, height);
 		}
 	};

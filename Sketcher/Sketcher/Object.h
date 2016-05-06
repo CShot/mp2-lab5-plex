@@ -14,10 +14,32 @@ namespace Sketcher
 	protected:
 		Point position;
 		Color color;
+		Color highlightColor;
 		System::Drawing::Rectangle boundRect;
 		Pen^ pen;
 	public:
+		property bool highlighted;
 		virtual void Draw(Graphics^ g) abstract;
+		Element():highlightColor(Color::Gold)
+		{
+			highlighted = false;
+		}
+		property System::Drawing::Rectangle bound
+		{
+			System::Drawing::Rectangle get()
+			{ 
+				return boundRect; 
+			}
+		}
+		bool Hit(Point p)
+		{
+			return boundRect.Contains(p);
+		}
+		virtual void Move(int dx, int dy) override
+		{
+			position.Offset(dx, dy);
+			Element::Move(dx, dy);
+		}
 	};
 	
 }

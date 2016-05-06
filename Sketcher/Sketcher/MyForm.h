@@ -17,6 +17,7 @@ namespace Sketcher {
 	using namespace System::Drawing;
 
 	enum class ElementType { LINE, RECTANGLE, CIRCLE, CURVE, ELLIPSE };
+	enum class Mode{ Normal, Move };
 
 	/// <summary>
 	/// Summary for MyForm
@@ -24,10 +25,11 @@ namespace Sketcher {
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
 	public:
-		MyForm(void) : elementType(ElementType::LINE), color(Color::Black)
+		MyForm(void) : elementType(ElementType::LINE), color(Color::Black), mode(Mode::Normal) 
 			, drawing(false)
 			, firstPoint(0)
 			, tempElement(nullptr)
+			, highlightedElement(nullptr)
 			, sketch(gcnew Sketch())
 		{
 			InitializeComponent();
@@ -73,6 +75,33 @@ namespace Sketcher {
 	private: System::Windows::Forms::ToolStripButton^  toolStripBlueButton;
 	private: System::Windows::Forms::ToolStripMenuItem^  ellipseToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripButton^  toolStripEllipseButton;
+	private: System::Windows::Forms::ContextMenuStrip^  contextMenuStrip1;
+	private: System::Windows::Forms::ToolStripMenuItem^  moveContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  deleteContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  sendToBackContextMenuItem;
+	private: System::Windows::Forms::ToolStripSeparator^  contextSeparator;
+
+
+	private: System::Windows::Forms::ToolStripMenuItem^  lineContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  rectangleContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  circleContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  ellipseContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  curveContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  blackContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  redContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  greenContextMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^  blueContextMenuItem;
+
+
+
+
+
+
+
+
+
+
+	private: System::ComponentModel::IContainer^  components;
 
 
 
@@ -84,7 +113,7 @@ namespace Sketcher {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 #pragma region Windows Form Designer generated code
 		/// <summary>
 		/// Required method for Designer support - do not modify
@@ -92,6 +121,7 @@ namespace Sketcher {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->elementToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -117,8 +147,23 @@ namespace Sketcher {
 			this->toolStripRedButton = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripGreenButton = (gcnew System::Windows::Forms::ToolStripButton());
 			this->toolStripBlueButton = (gcnew System::Windows::Forms::ToolStripButton());
+			this->contextMenuStrip1 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->moveContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->deleteContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->sendToBackContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->contextSeparator = (gcnew System::Windows::Forms::ToolStripSeparator());
+			this->lineContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->rectangleContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->ellipseContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->circleContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->curveContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->blackContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->redContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->greenContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->blueContextMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->menuStrip1->SuspendLayout();
 			this->toolStrip1->SuspendLayout();
+			this->contextMenuStrip1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// menuStrip1
@@ -350,12 +395,114 @@ namespace Sketcher {
 			this->toolStripBlueButton->ToolTipText = L"Draw in blue";
 			this->toolStripBlueButton->Click += gcnew System::EventHandler(this, &MyForm::blueToolStripMenuItem_Click);
 			// 
+			// contextMenuStrip1
+			// 
+			this->contextMenuStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(13) {
+				this->moveContextMenuItem,
+					this->deleteContextMenuItem, this->sendToBackContextMenuItem, this->contextSeparator, this->lineContextMenuItem, this->rectangleContextMenuItem,
+					this->ellipseContextMenuItem, this->circleContextMenuItem, this->curveContextMenuItem, this->blackContextMenuItem, this->redContextMenuItem,
+					this->greenContextMenuItem, this->blueContextMenuItem
+			});
+			this->contextMenuStrip1->Name = L"contextMenuStrip1";
+			this->contextMenuStrip1->Size = System::Drawing::Size(127, 274);
+			this->contextMenuStrip1->Opening += gcnew System::ComponentModel::CancelEventHandler(this, &MyForm::contextMenuStrip1_Opening_1);
+			// 
+			// moveContextMenuItem
+			// 
+			this->moveContextMenuItem->Name = L"moveContextMenuItem";
+			this->moveContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->moveContextMenuItem->Text = L"Move";
+			this->moveContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::moveContextMenuItem_Click);
+			// 
+			// deleteContextMenuItem
+			// 
+			this->deleteContextMenuItem->Name = L"deleteContextMenuItem";
+			this->deleteContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->deleteContextMenuItem->Text = L"Delete";
+			this->deleteContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::deleteContextMenuItem_Click);
+			// 
+			// sendToBackContextMenuItem
+			// 
+			this->sendToBackContextMenuItem->Name = L"sendToBackContextMenuItem";
+			this->sendToBackContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->sendToBackContextMenuItem->Text = L"Back";
+			this->sendToBackContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::sendToBackContextMenuItem_Click);
+			// 
+			// contextSeparator
+			// 
+			this->contextSeparator->Name = L"contextSeparator";
+			this->contextSeparator->Size = System::Drawing::Size(123, 6);
+			// 
+			// lineContextMenuItem
+			// 
+			this->lineContextMenuItem->Name = L"lineContextMenuItem";
+			this->lineContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->lineContextMenuItem->Text = L"Line";
+			this->lineContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::lineToolStripMenuItem_Click);
+			// 
+			// rectangleContextMenuItem
+			// 
+			this->rectangleContextMenuItem->Name = L"rectangleContextMenuItem";
+			this->rectangleContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->rectangleContextMenuItem->Text = L"Rectangle";
+			this->rectangleContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::rectangleToolStripMenuItem_Click);
+			// 
+			// ellipseContextMenuItem
+			// 
+			this->ellipseContextMenuItem->Name = L"ellipseContextMenuItem";
+			this->ellipseContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->ellipseContextMenuItem->Text = L"Ellipse";
+			this->ellipseContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::ellipseToolStripMenuItem_Click);
+			// 
+			// circleContextMenuItem
+			// 
+			this->circleContextMenuItem->Name = L"circleContextMenuItem";
+			this->circleContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->circleContextMenuItem->Text = L"Circle";
+			this->circleContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::circleToolStripMenuItem_Click);
+			// 
+			// curveContextMenuItem
+			// 
+			this->curveContextMenuItem->Name = L"curveContextMenuItem";
+			this->curveContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->curveContextMenuItem->Text = L"Curve";
+			this->curveContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::curveToolStripMenuItem_Click);
+			// 
+			// blackContextMenuItem
+			// 
+			this->blackContextMenuItem->Name = L"blackContextMenuItem";
+			this->blackContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->blackContextMenuItem->Text = L"Black";
+			this->blackContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::blackToolStripMenuItem_Click);
+			// 
+			// redContextMenuItem
+			// 
+			this->redContextMenuItem->Name = L"redContextMenuItem";
+			this->redContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->redContextMenuItem->Text = L"Red";
+			this->redContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::redToolStripMenuItem_Click);
+			// 
+			// greenContextMenuItem
+			// 
+			this->greenContextMenuItem->Name = L"greenContextMenuItem";
+			this->greenContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->greenContextMenuItem->Text = L"Green";
+			this->greenContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::greenToolStripMenuItem_Click);
+			// 
+			// blueContextMenuItem
+			// 
+			this->blueContextMenuItem->Name = L"blueContextMenuItem";
+			this->blueContextMenuItem->Size = System::Drawing::Size(126, 22);
+			this->blueContextMenuItem->Text = L"Blue";
+			this->blueContextMenuItem->Click += gcnew System::EventHandler(this, &MyForm::blueToolStripMenuItem_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::White;
 			this->ClientSize = System::Drawing::Size(484, 312);
+			this->ContextMenuStrip = this->contextMenuStrip1;
 			this->Controls->Add(this->toolStrip1);
 			this->Controls->Add(this->menuStrip1);
 			this->DoubleBuffered = true;
@@ -370,6 +517,7 @@ namespace Sketcher {
 			this->menuStrip1->PerformLayout();
 			this->toolStrip1->ResumeLayout(false);
 			this->toolStrip1->PerformLayout();
+			this->contextMenuStrip1->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -381,6 +529,12 @@ namespace Sketcher {
 	Element^ tempElement;
 	ElementType elementType;
 	Color color;
+	Element^ highlightedElement;
+	private: 
+		Mode mode;
+	private: System::Void moveContextMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
+		mode = Mode::Move;
+	}
 	private: System::Void lineToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		elementType = ElementType::LINE;
 		SetElementTypeButtonsState();
@@ -428,7 +582,7 @@ namespace Sketcher {
 		blueToolStripMenuItem->Checked = color == Color::Blue;
 	}
 
-			 // Set the state of the element type toolbar buttons
+			 
 			 void SetElementTypeButtonsState(void)
 			 {
 				 toolStripLineButton->Checked = elementType == ElementType::LINE;
@@ -438,7 +592,7 @@ namespace Sketcher {
 				 toolStripEllipseButton->Checked = elementType == ElementType::ELLIPSE;
 			 }
 
-			 // Set the state of the color toolbar buttons
+			 
 			 void SetColorButtonsState(void)
 			 {
 				 toolStripBlackButton->Checked = color == Color::Black;
@@ -449,17 +603,22 @@ namespace Sketcher {
 
 	private: System::Void MyForm_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
 	{
-		if (e->Button == System::Windows::Forms::MouseButtons::Left)
-		{
-			drawing = true;
-			firstPoint = e->Location;
-		}
+		if(e->Button==System::Windows::Forms::MouseButtons::Left)
+    {
+        if(mode==Mode::Normal)
+            drawing=true;
+ 
+        firstPoint=e->Location;
+    }
 	}
 
 	private: System::Void MyForm_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
 	{
 		if (drawing)
 		{
+			if (tempElement)
+				//Обьявить недействительной старую область элемента
+				Invalidate(tempElement->bound);
 			switch (elementType)
 			{
 			case ElementType::LINE:
@@ -471,17 +630,52 @@ namespace Sketcher {
 			case ElementType::CIRCLE:
 				tempElement = gcnew Circle(color, firstPoint, e->Location);
 				break;
+			case ElementType::CURVE:
+				if (tempElement == nullptr)
+					tempElement = gcnew Curve(color, firstPoint, e->Location);
+				else
+					safe_cast<Curve^>(tempElement)->Add(e->Location);
+				break;
 			case ElementType::ELLIPSE:
 				tempElement = gcnew Ellipse(color, firstPoint, e->Location);
 				break;
-			case ElementType::CURVE:
-				if (tempElement)
-					safe_cast<Curve^>(tempElement)->Add(e->Location);
-				else
-					tempElement = gcnew Curve(color, firstPoint, e->Location);
-				break;
+				//  MessageBox::Show("Hellow");
 			}
 			Invalidate();
+		}
+		else if (mode == Mode::Normal)
+		{
+			Element^ element(sketch->HitElement(e->Location));
+			if (highlightedElement == element)
+				return;
+			if (highlightedElement)
+			{
+				Invalidate(highlightedElement->bound);
+				highlightedElement->highlighted = false;
+				highlightedElement = nullptr;
+			}
+
+			
+			highlightedElement = element;
+			if (highlightedElement)
+			{
+				highlightedElement->highlighted = true;
+				Invalidate(highlightedElement->bound);
+			}
+			Update();
+		}
+		else if (mode == Mode::Move&&
+			e->Button == System::Windows::Forms::MouseButtons::Left)
+		{
+			if (highlightedElement)
+			{
+				Invalidate(highlightedElement->bound);
+				highlightedElement->Move(e->X - firstPoint.X,
+					e->Y - firstPoint.Y);
+				firstPoint = e->Location;
+				Invalidate(highlightedElement->bound);
+				Update();
+			}
 		}
 	}
 	private: System::Void MyForm_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
@@ -511,6 +705,59 @@ namespace Sketcher {
 		SetElementTypeButtonsState();
 	}
 			 
-	};
+	private: System::Void deleteContextMenuItem_Click(System::Object^  sender, System::EventArgs^  e) 
+	{
+		if (highlightedElement)
+		{
+			sketch -= highlightedElement;
+			Invalidate(highlightedElement->bound);
+			highlightedElement = nullptr;
+			Update();
+		}
+	}
+	private: System::Void sendToBackContextMenuItem_Click(System::Object^  sender, System::EventArgs^  e) 
+	{
+		if (highlightedElement)
+		{
+			sketch -= highlightedElement;
+			sketch->push_front(highlightedElement);
+			highlightedElement->highlighted = false;
+			Invalidate(highlightedElement->bound);
+			highlightedElement = nullptr;
+			Update();
+		}
+	}
+	private: System::Void contextMenuStrip1_Opening_1(System::Object^  sender, System::ComponentModel::CancelEventArgs^  e) 
+	{
+		contextMenuStrip1->Items->Clear();
+		if (highlightedElement)
+		{
+			contextMenuStrip1->Items->Add(moveContextMenuItem);
+			contextMenuStrip1->Items->Add(deleteContextMenuItem);
+			contextMenuStrip1->Items->Add(sendToBackContextMenuItem);
+		}
+		else
+		{
+			contextMenuStrip1->Items->Add(lineContextMenuItem);
+			contextMenuStrip1->Items->Add(rectangleContextMenuItem);
+			contextMenuStrip1->Items->Add(circleContextMenuItem);
+			contextMenuStrip1->Items->Add(curveContextMenuItem);
+			contextMenuStrip1->Items->Add(contextSeparator);
+			contextMenuStrip1->Items->Add(blackContextMenuItem);
+			contextMenuStrip1->Items->Add(redContextMenuItem);
+			contextMenuStrip1->Items->Add(greenContextMenuItem);
+			contextMenuStrip1->Items->Add(blueContextMenuItem);
+			lineContextMenuItem->Checked = elementType == ElementType::LINE;
+			rectangleContextMenuItem->Checked = elementType == ElementType::RECTANGLE;
+			circleContextMenuItem->Checked = elementType == ElementType::CIRCLE;
+			curveContextMenuItem->Checked = elementType == ElementType::CURVE;
+			blackContextMenuItem->Checked = color == Color::Black;
+			redContextMenuItem->Checked = color == Color::Red;
+			greenContextMenuItem->Checked = color == Color::Green;
+			blueContextMenuItem->Checked = color == Color::Blue;
+		}
+	}
+
+};
 }
 

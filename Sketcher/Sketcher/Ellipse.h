@@ -19,14 +19,15 @@ namespace Sketcher
 		{
 			pen = gcnew Pen(color);
 			this->color = color;
-			position = Point(Math::Min(start.X, end.X), Math::Min(start.Y, end.Y));
-			width = Math::Abs(end.X - start.X);
+			position = start;
 			height = Math::Abs(end.Y - start.Y);
-			boundRect = System::Drawing::Rectangle(start, Size(width, height));
+			width = Math::Abs(end.X - start.X);
+			boundRect = System::Drawing::Rectangle(position, Size(width, height));
 		}
 
 		virtual void Draw(Graphics^ g) override
 		{
+			pen->Color = highlighted ? highlightColor : color;
 			g->DrawEllipse(pen, position.X, position.Y, width, height);
 		}
 	};

@@ -18,8 +18,16 @@ Assembly Microsoft.VisualC.STLCLR, Version=2.0.0.0, Culture=neutral, PublicKeyTo
 	hash=None, flags=None
 Class Sketcher.Element: AutoLayout, AnsiClass, Class, Public, Abstract, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Properties:
+    System.Drawing.Rectangle bound 'get ' : 
+    Boolean highlighted 'get set' : 
   Methods:
+    get_highlighted(): PrivateScope, Public, HideBySig, SpecialName
+    set_highlighted(Boolean(HasFieldMarshal)): PrivateScope, Public, HideBySig, SpecialName
     Draw(Graphics): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask, Abstract
+    get_bound(): PrivateScope, Public, HideBySig, SpecialName
+    Hit(Point): PrivateScope, Public, HideBySig
+    Move(Int32, Int32): PrivateScope, Public, Virtual, HideBySig
 Class Sketcher.Line: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Sketcher.Element
     Void .ctor(System.Drawing.Color, System.Drawing.Point, System.Drawing.Point): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -52,6 +60,8 @@ Class Sketcher.Sketch: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     op_AdditionAssignment(Element): PrivateScope, Public, HideBySig, SpecialName
     op_SubtractionAssignment(Element): PrivateScope, Public, HideBySig, SpecialName
     Draw(Graphics): PrivateScope, Public, HideBySig
+    HitElement(Point): PrivateScope, Public, HideBySig
+    push_front(Element): PrivateScope, Public, HideBySig
 Class Sketcher.MyForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName

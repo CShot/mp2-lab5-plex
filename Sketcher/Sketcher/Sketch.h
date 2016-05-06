@@ -36,5 +36,20 @@ namespace Sketcher
 			for each(Element^ element in *elements)
 				element->Draw(g);
 		}
+
+		Element^ HitElement(Point p)
+		{
+			for (auto riter = elements->rbegin();
+				riter != elements->rend(); ++riter)
+			{
+				if ((*riter)->Hit(p))
+					return *riter;
+			}
+			return nullptr;
+		}
+		void push_front(Element^ element)
+		{
+			elements->push_front(element);
+		}
 	};
 }
