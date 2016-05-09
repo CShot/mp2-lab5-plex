@@ -10,65 +10,26 @@ namespace Sketcher
 {
 	public ref class Curve : Element
 	{
-	private:
-		vector<Point>^ points;
+	protected:
+		int width;
+		int height;
 
 	public:
-		Curve(Color color, Point p1, Point p2)
+		Curve(Color color, Point start, Point end)
 		{
 			pen = gcnew Pen(color);
-
 			this->color = color;
-			points = gcnew vector<Point>();
-			position = p1;
-			points->push_back(p2 - Size(position));
-
-			//Найдите минимальные и максимальные значения координат
-			int minX = p1.X<p2.X ? p1.X : p2.X;
-			int minY = p1.Y<p2.Y ? p1.Y : p2.Y;
-			int maxX = p1.X>p2.X ? p1.X : p2.X;
-			int maxY = p1.Y>p2.Y ? p1.Y : p2.Y;
-			int width = Math::Max(2, maxX - minX);
-			int height = Math::Max(2, maxY - minY);
-			boundRect = System::Drawing::Rectangle(minX, minY, width, height);
-			int penWidth(safe_cast<int>(pen->Width));
-			boundRect.Inflate(penWidth, penWidth);
-		}
-
-		void Add(Point p)
-		{
-			points->push_back(p - Size(position));
-			int penWidth(safe_cast<int>(pen->Width));
-			boundRect.Inflate(-penWidth, -penWidth);
-
-			if (p.X<boundRect.X)
-			{
-				boundRect.Width = boundRect.Right - p.X;
-				boundRect.X = p.X;
-			}
-			else if (p.X>boundRect.Right)
-				boundRect.Width = p.X - boundRect.Left;
-
-			if (p.Y<boundRect.Y)
-			{
-				boundRect.Height = boundRect.Bottom - p.Y;
-				boundRect.Y = p.Y;
-			}
-			else if (p.Y>boundRect.Bottom)
-				boundRect.Height = p.Y - boundRect.Top;
-			boundRect.Inflate(penWidth, penWidth);
+			position = Point(Math::Min(start.X, end.X), Math::Min(start.Y, end.Y));
+			width = 3/*Math::Abs(start.X - end.X)*/;
+			height = 3/*Math::Abs(start.Y - end.Y)*/;
+			boundRect = System::Drawing::Rectangle(position, Size(width + 1, height + 1));
+			/*int penWidth(safe_cast<int>(pen->Width));
+			boundRect.Inflate(penWidth, penWidth);*/
 		}
 		virtual void Draw(Graphics^ g) override
 		{
 			pen->Color = highlighted ? highlightColor : color;
-			g->TranslateTransform(safe_cast<float>(position.X), safe_cast<float>(position.Y));
-			Point previous(0, 0);
-			for each(Point p in *points)
-			{
-				g->DrawLine(pen, previous, p);
-				previous = p;
-			}
-			g->ResetTransform();
+			g->DrawEllipse(pen, position.X, position.Y, width, height);
 		}
 	};
 }

@@ -35,10 +35,11 @@ namespace Sketcher
 		{
 			return boundRect.Contains(p);
 		}
-		virtual void Move(int dx, int dy) override
+		virtual void Move(int dx, int dy)
 		{
 			position.Offset(dx, dy);
-			Element::Move(dx, dy);
+			boundRect.X += dx;
+			boundRect.Y += dy;
 		}
 	};
 	

@@ -38,10 +38,10 @@
     <ClInclude Include="Ellipse.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Curve.h">
+    <ClInclude Include="Sketch.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Sketch.h">
+    <ClInclude Include="Curve.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

@@ -19,10 +19,12 @@ namespace Sketcher
 		{
 			pen = gcnew Pen(color);
 			this->color = color;
-			position = start;
-			height = Math::Abs(end.Y - start.Y);
-			width = Math::Abs(end.X - start.X);
+			position = Point(Math::Min(start.X, end.X), Math::Min(start.Y, end.Y));
+			width = Math::Abs(start.X - end.X);
+			height = Math::Abs(start.Y - end.Y);
 			boundRect = System::Drawing::Rectangle(position, Size(width, height));
+			int penWidth(safe_cast<int>(pen->Width));
+			boundRect.Inflate(penWidth, penWidth);
 		}
 
 		virtual void Draw(Graphics^ g) override

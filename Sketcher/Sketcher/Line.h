@@ -34,5 +34,11 @@ namespace Sketcher
 			g->DrawLine(pen, 0, 0, end.X - position.X, end.Y - position.Y);
 			g->ResetTransform();
 		}
+		
+		virtual void Move(int dx, int dy) override
+		{
+			end.Offset(dx, dy);
+			Element::Move(dx, dy);
+		}
 	};
 }

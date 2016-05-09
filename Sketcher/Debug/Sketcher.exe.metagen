@@ -27,12 +27,13 @@ Class Sketcher.Element: AutoLayout, AnsiClass, Class, Public, Abstract, BeforeFi
     Draw(Graphics): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask, Abstract
     get_bound(): PrivateScope, Public, HideBySig, SpecialName
     Hit(Point): PrivateScope, Public, HideBySig
-    Move(Int32, Int32): PrivateScope, Public, Virtual, HideBySig
+    Move(Int32, Int32): PrivateScope, Public, Virtual, HideBySig, VtableLayoutMask
 Class Sketcher.Line: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Sketcher.Element
     Void .ctor(System.Drawing.Color, System.Drawing.Point, System.Drawing.Point): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
     Draw(Graphics): PrivateScope, Public, Virtual, HideBySig
+    Move(Int32, Int32): PrivateScope, Public, Virtual, HideBySig
 Class Sketcher.Rectangle: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Sketcher.Element
     Void .ctor(System.Drawing.Color, System.Drawing.Point, System.Drawing.Point): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
@@ -52,7 +53,6 @@ Class Sketcher.Curve: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :Sketcher.Element
     Void .ctor(System.Drawing.Color, System.Drawing.Point, System.Drawing.Point): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
   Methods:
-    Add(Point): PrivateScope, Public, HideBySig
     Draw(Graphics): PrivateScope, Public, Virtual, HideBySig
 Class Sketcher.Sketch: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
