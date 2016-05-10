@@ -18,9 +18,7 @@ namespace Sketcher
 		{
 			pen = gcnew Pen(color);
 			this->color = color;
-			int radius = safe_cast<int>(Math::Sqrt(
-				(start.X - end.X)*(start.X - end.X) +
-				(start.Y - end.Y)*(start.Y - end.Y)));
+			int radius = safe_cast<int>(Math::Sqrt((start.X - end.X)*(start.X - end.X) + (start.Y - end.Y)*(start.Y - end.Y)));
 			width = height = 2 * radius;
 			position.X = start.X - radius;
 			position.Y = start.Y - radius;

@@ -24,6 +24,7 @@ namespace Sketcher
 		{
 			highlighted = false;
 		}
+
 		property System::Drawing::Rectangle bound
 		{
 			System::Drawing::Rectangle get()
@@ -31,10 +32,12 @@ namespace Sketcher
 				return boundRect; 
 			}
 		}
+
 		bool Hit(Point p)
 		{
 			return boundRect.Contains(p);
 		}
+
 		virtual void Move(int dx, int dy)
 		{
 			position.Offset(dx, dy);
